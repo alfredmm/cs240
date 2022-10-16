@@ -3,6 +3,7 @@
 //
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 typedef struct string {
     char *s;
@@ -34,7 +35,43 @@ char *getLine(String *s) {
 #define NO  "NO"
 
 char *solution(int D, int C, int M, char *S) {
+    
     /*Complete this function*/
+    int test = scanf("%d",&test);
+    for(int t=1; t<=test; t++) {
+        
+        int d = scanf("%d",&D);
+        int n = scanf("%d",&n);
+        int c = scanf("%d",&C);
+        int m = scanf("%d",&M);
+        
+       String s;
+       char cd[10];
+       bool feed = true;
+
+       for(int i=0; i<n; i++) {
+           if(cd[i] == 'C') {
+               if(c <= 0) {
+                   while(i < n) {
+                       if(cd[i] == 'D') feed = false;
+                       i++;
+                   }
+                   break;
+               }
+               C--;
+           }
+           if(cd[i] == 'D') {
+               if(d <= 0) {
+                   feed = false;
+                   break;
+               }
+               D--;
+               C += M;
+           }
+       }
+
+        printf("Case #%d: %s\n",t,feed == true ? "YES" : "NO");
+    }
     return YES;
 
 }
