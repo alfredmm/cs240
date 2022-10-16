@@ -1,57 +1,55 @@
 //
 // Created by haoyu on 9/18/2022.
 //
-#include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
-typedef struct string {
-    char *s;
-    int len, cap;
-} String;
+// Function
+int solution(char *S, char *F)
+{
+	int m = strlen(S), n = strlen(F);
 
+	// This parts checks whether conversion is possible or not
+	if (n != m)
+		return -1;
+	int count[256];
+	for (int i = 0; i < 256; i++)
+		count[i] = 0;
+	// count characters in S
+	for (int i = 0; i < n; i++)
+		count[S[i]]++;
+	// Subtract count for every character in F
+	for (int i = 0; i < n; i++)
+		count[F[i]]--;
+	// Check if all counts become 0
+	for (int i = 0; i < 256; i++)
+		if (count[i])
+			return -1;
 
-String *append_string(String *s, char c) {
-    if (s->cap == s->len) {
-        s->cap <<= 1;
-        s->s = (char *) realloc(s->s, s->cap);
-    }
-    s->s[s->len++] = c;
-    s->s[s->len] = 0;
-    return s;
+	// This part calculates the number of operations required
+	int result = 0;
+	for (int i = n - 1, j = n - 1; i >= 0;) {
+		// If there is a mismatch, then keep incrementing
+		// result until F[j] is not found in S[0..i]
+		while (i >= 0 && S[i] != F[j]) {
+			i--;
+			result++;
+		}
+		// If A[i] and B[j] match
+		if (i >= 0) {
+			i--;
+			j--;
+		}
+	}
+	return result;
 }
 
-char *getLine(String *s) {
-    s->len = 0;
-    char c;
-    while (1) {
-        c = getchar();
-        if (c == -1 || c == '\n') return s->s;
-        append_string(s, c);
-    }
-}
-
-
-int solution(char *S, char *F) {
-    /*Complete this function*/
-}
-
-int main(int argc, char *argv[]) {
-    int t;
-    String s1 = {malloc(10), 0, 10},
-            s2 = {malloc(10), 0, 10};
-    t = atoi(getLine(&s1));
-    for (int i = 1; i <= t; ++i) {
-        getLine(&s1);
-        getLine(&s2);
-
-        if (argc == 1) {
-            printf("Case #%d: %d\n", i, solution(s1.s, s2.s));
-        } else if (atoi(argv[1]) == i) {
-            printf("s1: %s\n", s1.s);
-            printf("s2: %s\n", s2.s);
-        }
-        s1.len = 0;
-        s2.len = 0;
-    }
-    return 0;
+// Main Function
+int main()
+{
+    //Test Ouput
+	char S[] = "ABCD";
+	char F[] = "ACBD";
+	printf("Minimum number of operations: %d", solution(S, F));
+	return 0;
 }
